@@ -2,98 +2,174 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Payzume Web</title>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@300;400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payzumé - Cerveza Artesanal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: 'Archivo', sans-serif;
+            font-family: 'Archivo Black', sans-serif;
             background-color: #f9f9f9;
             color: #333;
-            padding: 20px;
         }
 
         header {
-            display: flex;
-            align-items: center;
             background-color: #fff;
+            text-align: center;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
         }
 
         header img {
-            height: 60px;
-            margin-right: 20px;
+            max-width: 80%;
+            height: auto;
         }
 
-        h1 {
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 2.5em;
-            margin: 0;
+        .catalogo {
+            padding: 20px;
+            text-align: center;
         }
 
         .producto {
-            display: flex;
-            align-items: center;
             background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
 
         .producto img {
-            height: 200px;
-            margin-left: 30px;
-            border-radius: 10px;
+            width: 100px;
+            height: auto;
+            margin-left: 20px;
         }
 
-        .descripcion {
-            max-width: 60%;
+        .producto-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .descripcion h2 {
+        h2 {
+            font-size: 24px;
+        }
+
+        .boton {
+            margin-top: 15px;
+            padding: 12px 24px;
+            background-color: #ffc107;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-verde {
+            background-color: #25D366;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .seccion-carrito, .seccion-pago {
+            padding: 20px;
+        }
+
+        select, input[type="text"] {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
             font-family: 'Archivo Black', sans-serif;
-            font-size: 2em;
-            margin-bottom: 10px;
         }
 
-        .descripcion p {
-            font-size: 1.1em;
-            font-weight: 300;
-        }
     </style>
 </head>
 <body>
-
     <header>
-        <img src="payzumelogo.png" alt="Logo de Payzume">
-        <h1>PAYZUME</h1>
+        <img src="payzumelogo.png" alt="Logo Payzumé">
     </header>
 
-    <section class="producto">
-        <div class="descripcion">
-            <h2>Cerveza Artesanal</h2>
-            <p>La cerveza PAYZUME nace de la pasión por compartir, brindar y crear momentos únicos. Elaborada cuidadosamente para quienes saben disfrutar de los detalles.</p>
+    <div class="catalogo">
+        <div class="producto">
+            <div class="producto-info">
+                <div>
+                    <h2>PAYZUME RUBIA 330cc</h2>
+                    <p style="font-weight: lighter;">$1800</p>
+                    <button class="boton" onclick="agregarAlCarrito()">Agregar al carrito</button>
+                </div>
+                <img src="cervezapayzume.png" alt="Cerveza Payzume">
+            </div>
         </div>
-        <img src="cervezapayzume.png" alt="Imagen de la cerveza Payzume">
-    </section>
-    <div style="text-align: center; margin-top: 40px;">
-        <a href="https://wa.me/543424227490" target="_blank" style="
-            background-color: #25D366;
-            color: white;
-            font-family: 'Archivo Black', sans-serif;
-            padding: 14px 24px;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 10px;
-            display: inline-flex;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        ">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="height: 24px; margin-right: 10px;">
-            Escribinos por WhatsApp
+    </div>
+
+    <div class="seccion-carrito" id="carrito" style="display:none;">
+        <h2>Tu Carrito</h2>
+        <p>1x PAYZUME RUBIA 330cc - $1800</p>
+        <button class="boton" onclick="mostrarPago()">Proceder al pago</button>
+    </div>
+
+    <div class="seccion-pago" id="pago" style="display:none;">
+        <h2>Opciones de Entrega</h2>
+        <select id="entrega" onchange="toggleDireccion()">
+            <option value="retiro">Retiro en el local</option>
+            <option value="delivery">Delivery (+$1000)</option>
+        </select>
+
+        <div id="direccion-info" style="display:none;">
+            <input type="text" id="direccion" placeholder="Dirección">
+            <input type="text" id="localidad" placeholder="Localidad">
+        </div>
+
+        <h2>Método de Pago</h2>
+        <select id="pagoMetodo">
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+        </select>
+
+        <br><br>
+        <a id="whatsappBtn" class="boton boton-verde" href="#" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="height: 20px;">
+            Finalizar Pedido por WhatsApp
         </a>
     </div>
+
+    <script>
+        function agregarAlCarrito() {
+            document.getElementById('carrito').style.display = 'block';
+        }
+
+        function mostrarPago() {
+            document.getElementById('pago').style.display = 'block';
+        }
+
+        function toggleDireccion() {
+            var entrega = document.getElementById('entrega').value;
+            var direccion = document.getElementById('direccion-info');
+            direccion.style.display = entrega === 'delivery' ? 'block' : 'none';
+        }
+
+        const btn = document.getElementById('whatsappBtn');
+        btn.addEventListener('click', function() {
+            const entrega = document.getElementById('entrega').value;
+            const direccion = document.getElementById('direccion').value;
+            const localidad = document.getElementById('localidad').value;
+            const metodo = document.getElementById('pagoMetodo').value;
+
+            let mensaje = `Hola! Te quería encargar: 1x PAYZUME RUBIA 330cc ($1800)`;
+            if (entrega === 'delivery') {
+                mensaje += `\nEntrega: Delivery (+$1000)\nDirección: ${direccion}\nLocalidad: ${localidad}`;
+            } else {
+                mensaje += `\nEntrega: Retiro en local`;
+            }
+            mensaje += `\nPago: ${metodo}`;
+
+            const url = `https://wa.me/543424227490?text=${encodeURIComponent(mensaje)}`;
+            btn.href = url;
+        });
+    </script>
 </body>
 </html>
